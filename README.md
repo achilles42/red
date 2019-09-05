@@ -1,5 +1,13 @@
 # RED
 
+<p align="center"><img src="docs/images/logo.png" width="360"></p>
+<p align="center">
+  <a href="https://travis-ci.org/achilles42/red"><img src="https://travis-ci.org/achilles42/red.svg?branch=master" alt="Build Status"></img></a>
+  <a href="https://goreportcard.com/report/github.com/achilles42/red"><img src="https://goreportcard.com/badge/github.com/achilles42/red"></img></a>
+  <a href="https://golangci.com"><img src="https://golangci.com/badges/github.com/achilles42/red.svg"></img></a>
+  <a href="https://coveralls.io/github/gojektech/achilles42?branch=master"><img src="https://coveralls.io/repos/github/achilles42/red/badge.svg?branch=master"></img></a>
+</p>
+
 RED (Request, Error and Duration) is a golang library, exposes total number of requests, error rate and duration of HTTP requests for a HTTP service out of the box. This library is inspired by Tom Wilkie's [RED methods](https://thenewstack.io/monitoring-microservices-red-method/)
 
 From the Four Golden signals to the RED way of creating Metrics. The RED method is a subset of “The Four Golden Signals” that’s focused on micro-service architectures and which includes these metrics:
