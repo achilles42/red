@@ -6,7 +6,6 @@ import (
 	"os"
 
 	red "github.com/achilles42/red"
-
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
