@@ -62,9 +62,11 @@ func main() {
 ```
 
 To start the application:
+
 > export ADDR=localhost:8080 && go run main.go
 
 To access the metrics:
+
 > curl http://localhost:8080/metrics
 
 ```
@@ -73,7 +75,7 @@ To access the metrics:
 http_requests_total{method="GET",route="/v1/hello",status_code="200"} 1
 ```
 
-## Contributing
+## Contribution
 1. Fork it
 2. Create your feature branch (git checkout -b my-new-feature)
 3. Commit your changes (git commit -am 'Add some feature')
