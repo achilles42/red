@@ -73,6 +73,13 @@ To access the metrics:
 # HELP http_requests_total How many HTTP requests processed, partitioned by status code and HTTP method.
 # TYPE http_requests_total counter
 http_requests_total{method="GET",route="/v1/hello",status_code="200"} 1
+
+# HELP request_duration_seconds Time (in seconds) spent serving HTTP requests.
+# TYPE request_duration_seconds histogram
+request_duration_seconds_bucket{method="GET",route="/v1/hello",status_code="200",le="0.005"} 3
+request_duration_seconds_bucket{method="GET",route="/v1/hello",status_code="200",le="0.01"} 3
+request_duration_seconds_bucket{method="GET",route="/v1/hello",status_code="200",le="0.025"} 3
+
 ```
 
 ## Contribution
