@@ -92,7 +92,7 @@ request_duration_seconds_bucket{method="GET",route="/v1/hello",status_code="200"
 > Import RED.json dashboard file located in docs/dashboard/RED.json
 
 ### RED Dashboard
-<p align="lefts"><img src="docs/images/dashboard.png" width="550"></p>
+<p align="lefts"><img src="docs/images/dashboard.png" width="750" height="250"></p>
 
 
 ## Contribution
