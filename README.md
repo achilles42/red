@@ -79,8 +79,21 @@ http_requests_total{method="GET",route="/v1/hello",status_code="200"} 1
 request_duration_seconds_bucket{method="GET",route="/v1/hello",status_code="200",le="0.005"} 3
 request_duration_seconds_bucket{method="GET",route="/v1/hello",status_code="200",le="0.01"} 3
 request_duration_seconds_bucket{method="GET",route="/v1/hello",status_code="200",le="0.025"} 3
-
 ```
+
+### Setup Prometheus and Grafana
+
+> docker run -p 9090:9090 -v /tmp/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
+
+> docker run -d --name=grafana -p 3000:3000 grafana/grafana
+
+> Add data source on Grafana with http://localhost:9090
+
+> Import RED.json dashboard file located in docs/dashboard/RED.json
+
+### RED Dashboard
+<p align="lefts"><img src="docs/images/dashboard.png" width="550"></p>
+
 
 ## Contribution
 1. Fork it
