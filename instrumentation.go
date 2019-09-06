@@ -3,13 +3,13 @@ package red
 import (
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 )
 
-// HTTPRequests - returns prometheus counter for total HTTP request
-var HTTPRequests = promauto.NewCounterVec(
+var RequestTotal = promauto.NewCounterVec(
 	prometheus.CounterOpts{
 		Name: "http_requests_total",
 		Help: "How many HTTP requests processed, partitioned by status code and HTTP method.",
@@ -17,9 +17,18 @@ var HTTPRequests = promauto.NewCounterVec(
 	[]string{"status_code", "method", "route"},
 )
 
-// Register - Registers the Prometheus metrics
+var RequestDuration = promauto.NewHistogramVec(
+	prometheus.HistogramOpts{
+		Name:    "request_duration_seconds",
+		Help:    "Time (in seconds) spent serving HTTP requests.",
+		Buckets: prometheus.DefBuckets,
+	},
+	[]string{"status_code", "method", "route"},
+)
+
 func Register() {
-	prometheus.Register(HTTPRequests)
+	prometheus.Register(RequestDuration)
+	prometheus.Register(RequestTotal)
 }
 
 type statusWriter struct {
@@ -42,7 +51,10 @@ func (w *statusWriter) Write(b []byte) (int, error) {
 func InstrumentationMiddleware(n http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		sw := statusWriter{ResponseWriter: w}
+		startTime := time.Now()
 		n.ServeHTTP(&sw, r)
-		HTTPRequests.WithLabelValues(strconv.Itoa(sw.Status), r.Method, r.RequestURI).Inc()
+		duration := time.Now().Sub(startTime)
+		RequestTotal.WithLabelValues(strconv.Itoa(sw.Status), r.Method, r.RequestURI).Inc()
+		RequestDuration.WithLabelValues(strconv.Itoa(sw.Status), r.Method, r.RequestURI).Observe(duration.Seconds())
 	})
 }
