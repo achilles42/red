@@ -14,7 +14,7 @@ var HTTPRequests = promauto.NewCounterVec(
 		Name: "http_requests_total",
 		Help: "How many HTTP requests processed, partitioned by status code and HTTP method.",
 	},
-	[]string{"status_code", "method", "route", "content_length"},
+	[]string{"status_code", "method", "route"},
 )
 
 // Register - Registers the Prometheus metrics
@@ -25,7 +25,6 @@ func Register() {
 type statusWriter struct {
 	http.ResponseWriter
 	Status int
-	Length int
 }
 
 func (w *statusWriter) WriteHeader(status int) {
@@ -37,15 +36,13 @@ func (w *statusWriter) Write(b []byte) (int, error) {
 	if w.Status == 0 {
 		w.Status = 200
 	}
-	n, err := w.ResponseWriter.Write(b)
-	w.Length += n
-	return n, err
+	return w.ResponseWriter.Write(b)
 }
 
 func InstrumentationMiddleware(n http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		sw := statusWriter{ResponseWriter: w}
 		n.ServeHTTP(&sw, r)
-		HTTPRequests.WithLabelValues(strconv.Itoa(sw.Status), r.Method, r.RequestURI, strconv.Itoa(sw.Length)).Inc()
+		HTTPRequests.WithLabelValues(strconv.Itoa(sw.Status), r.Method, r.RequestURI).Inc()
 	})
 }
